@@ -1,27 +1,38 @@
 package com.diginamic.Diginamic.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Ville {
-	
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    private Long id;
+
     private String nom;
+    
     private int nbHabitants;
 
-    public Ville() {
-    	
-    }
-    
-    public Ville(Long id, String nom, int nbHabitants) {
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "departement_id")
+    @NotNull
+    private Departement departement;
+
+    public Ville(String nom, int nbHabitants, Departement departement) {
         this.nom = nom;
         this.nbHabitants = nbHabitants;
-        this.id=id;
+        this.departement = departement;
+    }
+
+    public Ville() {
+
     }
 
 	/**
@@ -50,6 +61,20 @@ public class Ville {
 	 */
 	public void setNbHabitants(int nbHabitants) {
 		this.nbHabitants = nbHabitants;
+	}
+
+	/**
+	 * @return the departement
+	 */
+	public Departement getDepartement() {
+		return departement;
+	}
+
+	/**
+	 * @param departement the departement to set
+	 */
+	public void setDepartement(Departement departement) {
+		this.departement = departement;
 	}
 
 	/**

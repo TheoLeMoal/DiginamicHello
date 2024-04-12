@@ -1,15 +1,32 @@
 package com.diginamic.Diginamic.repository;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
+import com.diginamic.Diginamic.model.Departement;
 import com.diginamic.Diginamic.model.Ville;
 
-public interface VilleRepository extends JpaRepository<Ville, Integer> {
-	List<Ville> findAll();
-    Ville findByNom(String nom);
-    Ville findById(Long id);
-    Ville save(Ville villeAdded);
-    void delete(Ville villeAdded);
+@Repository
+public interface VilleRepository extends CrudRepository<Ville, Long> {
+
+    Optional<Ville> findByNom(String nom);
+
+    Optional<Ville> findByNomAndDepartement(String nom, Departement departement);
+
+    List<Ville> findByNomStartingWith(String nom);
+
+    List<Ville> findByNbHabitantsGreaterThan(int nbHabitantsMin);
+
+    List<Ville> findByNbHabitantsBetween(int nbHabitantsMin, int nbHabitantsMax);
+
+    List<Ville> findByDepartementCodeAndNbHabitantsGreaterThan(String departementCode, int nbHabitants);
+
+    List<Ville> findByDepartementCodeAndNbHabitantsBetween(String departementCode, int nbHabitants, int nbHabitants2);
+
+    Page<Ville> findVillesByDepartementCodeOrderByNbHabitantsDesc(String departementCode, Pageable pageable);
 }
