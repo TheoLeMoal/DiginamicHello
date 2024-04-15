@@ -23,39 +23,48 @@ public class VilleService {
     @Autowired
     private VilleRepository villeRepository;
 
-    @PostConstruct
+    /*@PostConstruct
     public void init() {
         villeRepository.save(new Ville("Paris",2133111, new Departement("Paris","75")));
         villeRepository.save(new Ville("Marseille", 873076, new Departement("Bouches-du-Rhône", "13")));
         villeRepository.save(new Ville("Lyon", 522250, new Departement("Rhône","69")));
-    }
+        villeRepository.save(new Ville("Livron-sur-Drôme", 823486, new Departement("Drôme","26")));
+    }*/
 
     @Transactional
-    public boolean insertVille(Ville ville) throws GestionExceptions {
-        if(ville.getNbHabitants() < 10) {
+    public void insertVille(Ville villeAdded) throws GestionExceptions {
+        if(villeAdded.getNbHabitants() < 10) {
             throw new GestionExceptions("Une Ville doit avoir au minimum 10 habitants.");
         }
         
-        if(ville.getNom().length() < 2) {
+        if(villeAdded.getNom().length() < 2) {
             throw new GestionExceptions("Le nom de la ville doit avoir au minimum 2 caractères");
         }
         
-        if(ville.getDepartement().getCode().length() < 2 || ville.getDepartement().getCode().length() > 3) {
+        if(villeAdded.getDepartement().getCode().length() < 2 || villeAdded.getDepartement().getCode().length() > 3) {
             throw new GestionExceptions("Le code département doit être composé de 2 ou 3 caractères");
         }
         
-        if (ville.getDepartement().getNom().length() < 3) {
+        if (villeAdded.getDepartement().getNom().length() < 3) {
             throw new GestionExceptions("Le nom du département doit contenir au minimum 3 lettres");
         }
         
-        Optional<Ville> villeBdd = villeRepository.findByNomAndDepartement(ville.getNom(), ville.getDepartement());
-        
-        if(villeBdd.get() == null) {
-            villeRepository.save(ville);
-            return true;
-        } else {
-            return false;
+        // Récupérer toutes les villes existantes dans la base de données
+        Iterable<Ville> villesIterable = villeRepository.findAll();
+        List<Ville> villes = new ArrayList<>();
+        villesIterable.forEach(villes::add);
+
+        // Vérifier si la ville ajoutée existe déjà dans la base de données
+        for (Ville ville : villes) {
+            if (ville.getNom().equals(villeAdded.getNom()) &&
+                    ville.getDepartement().getCode().equals(villeAdded.getDepartement().getCode()) &&
+                    ville.getDepartement().getNom().equals(villeAdded.getDepartement().getNom())) {
+                throw new GestionExceptions("Cette ville existe déjà.");
+            }
         }
+        
+     // Si la ville n'existe pas déjà, l'ajouter à la base de données
+        villeRepository.save(villeAdded);
     }
 
     @Transactional

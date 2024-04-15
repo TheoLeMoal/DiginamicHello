@@ -29,13 +29,8 @@ public class VilleControleur {
     private VilleService villeService;
 
     @PostMapping
-    public ResponseEntity<String> createVille(@RequestBody Ville ville) throws GestionExceptions {
-        boolean result = villeService.insertVille(ville);
-        if (!result) {
-            return ResponseEntity.badRequest().body("Cette ville n'a pas été créée !");
-        } else {
-            return ResponseEntity.ok("La ville a bien été créée !");
-        }
+    public void createVille(@RequestBody Ville ville) throws GestionExceptions {
+        villeService.insertVille(ville);
     }
 
     @GetMapping

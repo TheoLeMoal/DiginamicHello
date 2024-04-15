@@ -30,12 +30,8 @@ public class DepartementControleur {
 
     @PostMapping
     public ResponseEntity<String> createDepartement(@RequestBody Departement departement) throws GestionExceptions {
-        boolean result = departementService.insertDepartement(departement);
-        if (!result) {
-            return ResponseEntity.badRequest().body("Ce département n'a pas été créée !");
-        } else {
-            return ResponseEntity.ok("Le département a bien été créée !");
-        }
+        departementService.insertDepartement(departement);
+        return ResponseEntity.ok("Le département a bien été créée !");
     }
 
     @GetMapping

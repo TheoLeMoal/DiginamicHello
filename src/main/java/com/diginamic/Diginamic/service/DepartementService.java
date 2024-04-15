@@ -20,22 +20,17 @@ public class DepartementService {
     private DepartementRepository departementRepository;
 
     @Transactional
-    public boolean insertDepartement(Departement departement) throws GestionExceptions {
+    public void insertDepartement(Departement departement) throws GestionExceptions {
         Optional<Departement> departementBdd = departementRepository.findByCode(departement.getCode());
-        
-        if (departement.getNom().length() < 3) {
-            throw new GestionExceptions("Le nom du département doit contenir au minimum 3 lettres");
-        }
-        
         if (departement.getCode().length() < 2 || departement.getCode().length() > 3) {
-            throw new GestionExceptions("Le code département doit être composé de 2 ou 3 caractères");
+            throw new GestionExceptions("Le code département doit être composé de 2 à 3 caractères");
         }
-        
+        if (departement.getNom().length() < 3) {
+            throw new GestionExceptions("Le nom du département doit contenir au moins 3 lettres");
+        }
         if(!departementBdd.isPresent()) {
             departementRepository.save(departement);
-            return true;
         }
-		return false;
     }
 
     @Transactional
@@ -59,10 +54,10 @@ public class DepartementService {
         
         Optional<Departement> departement = departementRepository.findByCode(code);
         
-        if(departement != null) {
+        if (departement.isPresent()) {
             return departement.get();
         } else {
-            return null;
+            return null; // or throw an exception if appropriate
         }
     }
 
