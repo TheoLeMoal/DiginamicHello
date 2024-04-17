@@ -79,5 +79,9 @@ public class Departement {
 	public Long getId() {
 		return id;
 	}
-    
+
+	@Override
+	public String toString() {
+		return "Departement [nom=" + nom + ", code=" + code + "]";
+	}
 }

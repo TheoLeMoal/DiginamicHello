@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Villes</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Liste des Villes</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nom de la Ville</th>
+            <th>Nombre d'habitants</th>
+            <th>Nom du Département</th>
+            <th>Code du Département</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Utilisation de Thymeleaf pour parcourir la liste de villes -->
+        <tr th:each="ville : ${villes}">
+            <td th:text="${ville.nom}"></td>
+            <td th:text="${ville.nbHabitants}"></td>
+            <td th:text="${ville.departement.nom}"></td>
+            <td th:text="${ville.departement.code}"></td>
+        </tr>
+    </tbody>
+</table>
